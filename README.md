@@ -5,4 +5,9 @@
 ## 使用说明
 * 设置数据集`x_train`,`y_train`及w,b初始值
 * 设定迭代次数`num_iter`及学习率`lr`
-* enjoy yourself！
+* running
+
+## 2022.10.27更新
+* 重新整理代码
+* 代价函数(cost)以3d可视化形式展现
+
