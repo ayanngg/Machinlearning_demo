@@ -1,30 +1,22 @@
-# 这是一个示例 Python 脚本。
-
-# 按 ⌃R 执行或将其替换为您的代码。
-# 按 双击 ⇧ 在所有地方搜索类、文件、工具窗口、操作和设置。
-
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
-#绘制房价散点图
+
+#  设定数据集
 x_train=np.arange(0,15,1)
-y_train=np.array([400.0,700.0,1000.0,1200,1300,1700,1900,2100,2200,2400,2700,2900,2600,3000,3800])
-plt.scatter(x_train,y_train,marker='x',c='r',label='actual prices')
-# plt.plot(x_train,y_train,c='b',label='our predictions')
-plt.title("Housing prices")
-plt.ylabel("Price (in 1000s of dollars)")
-plt.xlabel("Size (1000 sqft)")
+y_train=np.array([2,3,4,6,8,9,10,13,14,16,17,19,24,25,26])
+#给定参数w,b
+w=5
+b=3
 
-
-def compute_f_wb(x,w,b):          #计算拟合曲线
-    m=x.shape[0]        #获取长度
+def compute_f_wb(x,w,b):    #计算y^=wx+b
+    m=x.shape[0]     #获取长度
     f_wb=np.zeros(m)
     for i in range(m):
         f_wb[i]=w*x[i]+b
     return f_wb
 
-w=500
-b=200
 
 def compute_cost(x,y,w,b):     #计算代价函数，min cost(w,b)即为最优值
     m=x.shape[0]
@@ -35,9 +27,6 @@ def compute_cost(x,y,w,b):     #计算代价函数，min cost(w,b)即为最优�
     return cost
 
 # print(compute_cost(x_train,y_train,w,b))
-
-
-
 
 def compute_gradient(x,y,w,b):      #计算函数的梯度
     m=x.shape[0]
@@ -60,20 +49,42 @@ def compute_linerRegression(x,y,w,b,num_iter,lr):    #梯度下降实现线性�
             return w,b
     return w,b
 
-'''测试部分'''
-w,b= compute_linerRegression(x_train, y_train, w, b, 100000, 0.01)
+#测试部分
+w,b= compute_linerRegression(x_train, y_train, w, b, 100000, 0.01)#设定线性回归所需参数
 f_wb=compute_f_wb(x_train,w,b)
 print(f"w is {w},b is {b}\n")
 print(f"cost is {compute_cost(x_train,y_train,w,b)}\n")
-'''测试部分'''
+#测试部分
+
+#创建画布
+fig=plt.figure(figsize=plt.figaspect(2))
+# fig,(ax1,ax2) = plt.subplots(1, 2)
+# ax2.plot(x_train,y_train,c='b',label='feature y')
+
+#第一个子图,绘制拟合的直线
+ax1=fig.add_subplot(2,1,1)
+ax1.scatter(x_train,y_train,marker='x',c='r')
+ax1.plot(x_train,f_wb,c='b')
+plt.xlabel('x')
+plt.ylabel('y')
 
 
+#第二个子图,绘制cost函数
+ax=fig.add_subplot(2,1,2,projection='3d')
+# ax = Axes3D(fig, auto_add_to_figure=False)
+# fig.add_axes(ax)
+w=np.arange(-5,5,0.1)
+b=np.arange(-5,5,0.1)
+X, Y = np.meshgrid(w, b)
+Z =compute_cost(x_train,y_train,X,Y)
+plt.xlabel('w')
+plt.ylabel('b')
+ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap='rainbow')
 
-'''绘制拟合直线'''
-plt.plot(x_train,f_wb,c='b',label='our predictions')
-plt.legend()
+
 plt.show()
-'''绘制拟合直线'''
+
+
 
 
 
